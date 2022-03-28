@@ -1,0 +1,21 @@
+{
+    "name": "node-cloudflared-tunnel",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "main": "cloudflared-tunnel.js.js",
+    "scripts": {},
+    "author": "Louis Lam",
+    "license": "MIT",
+    "dependencies": {
+        "command-exists": "^1.2.9"
+    },
+    "devDependencies": {
+        "eslint": "^7.32.0",
+        "eslint-config-standard": "^16.0.3",
+        "eslint-plugin-import": "^2.25.4",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^5.2.0"
+    }
+
+}
