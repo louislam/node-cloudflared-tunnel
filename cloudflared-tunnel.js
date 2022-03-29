@@ -85,7 +85,7 @@ class CloudflaredTunnel {
         });
 
         this.childProcess.stderr.on("data", (data) => {
-            this.emitError(data);
+            this.emitError(data.toString());
         });
     }
 
