@@ -35,9 +35,6 @@ class CloudflaredTunnel {
     }
 
     start() {
-        this.running = true;
-        this.emitChange("Starting Server");
-
         if (!this.checkInstalled()) {
             this.emitError(`Cloudflared error: ${this.cloudflaredPath} is not found`);
             return;
@@ -68,6 +65,8 @@ class CloudflaredTunnel {
         args.push("--token");
         args.push(this.token);
 
+        this.running = true;
+        this.emitChange("Starting Server");
         this.childProcess = childProcess.spawn(this.cloudflaredPath, args);
         this.childProcess.stdout.pipe(process.stdout);
         this.childProcess.stderr.pipe(process.stderr);
