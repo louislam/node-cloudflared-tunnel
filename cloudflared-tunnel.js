@@ -22,14 +22,29 @@ class CloudflaredTunnel {
         return commandExistsSync(this.cloudflaredPath);
     }
 
+    emitChange(msg) {
+        if (this.change) {
+            this.change(this.running, msg);
+        }
+    }
+
+    emitError(msg) {
+        if (this.error) {
+            this.error(msg);
+        }
+    }
+
     start() {
+        this.running = true;
+        this.emitChange("Starting Server");
+
         if (!this.checkInstalled()) {
-            console.error(`Cloudflared error: ${this.cloudflaredPath} is not found`);
+            this.emitError(`Cloudflared error: ${this.cloudflaredPath} is not found`);
             return;
         }
 
         if (!this.token) {
-            console.error("Cloudflared error: Token is not set");
+            this.emitError("Cloudflared error: Token is not set");
             return;
         }
 
@@ -58,19 +73,21 @@ class CloudflaredTunnel {
         this.childProcess.stderr.pipe(process.stderr);
 
         this.childProcess.on("close", (code) => {
-
+            this.running = false;
+            this.emitChange("Stopped Server");
         });
 
         this.childProcess.on("error", (err) => {
             if (err.code === "ENOENT") {
-                console.error(`Cloudflared error: ${this.cloudflaredPath} is not found`);
+                this.emitError(`Cloudflared error: ${this.cloudflaredPath} is not found`);
             } else {
-                console.error(err);
+                this.emitError(err);
             }
         });
     }
 
     stop() {
+        this.emitChange("Stopping Server");
         this.childProcess.kill("SIGINT");
     }
 }

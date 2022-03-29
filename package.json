@@ -1,6 +1,6 @@
 {
     "name": "node-cloudflared-tunnel",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "",
     "main": "cloudflared-tunnel.js",
     "scripts": {},
