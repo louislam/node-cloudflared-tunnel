@@ -22,9 +22,9 @@ class CloudflaredTunnel {
         return commandExistsSync(this.cloudflaredPath);
     }
 
-    emitChange(msg) {
+    emitChange(msg, code) {
         if (this.change) {
-            this.change(this.running, msg);
+            this.change(this.running, msg, code);
         }
     }
 
@@ -66,14 +66,14 @@ class CloudflaredTunnel {
         args.push(this.token);
 
         this.running = true;
-        this.emitChange("Starting Server");
+        this.emitChange("Starting cloudflared");
         this.childProcess = childProcess.spawn(this.cloudflaredPath, args);
         this.childProcess.stdout.pipe(process.stdout);
         this.childProcess.stderr.pipe(process.stderr);
 
         this.childProcess.on("close", (code) => {
             this.running = false;
-            this.emitChange("Stopped Server");
+            this.emitChange("Stopped cloudflared", code);
         });
 
         this.childProcess.on("error", (err) => {
@@ -83,10 +83,14 @@ class CloudflaredTunnel {
                 this.emitError(err);
             }
         });
+
+        this.childProcess.stderr.on("data", (data) => {
+            this.emitError(data);
+        });
     }
 
     stop() {
-        this.emitChange("Stopping Server");
+        this.emitChange("Stopping cloudflared");
         this.childProcess.kill("SIGINT");
     }
 }
