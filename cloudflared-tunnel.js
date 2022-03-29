@@ -1,7 +1,7 @@
-import childProcess from "child_process";
-import { sync as commandExistsSync } from "command-exists";
+const childProcess = require("child_process");
+const commandExistsSync = require("command-exists").sync;
 
-export class CloudflaredTunnel {
+class CloudflaredTunnel {
 
     constructor(cloudflaredPath = "cloudflared") {
         this.cloudflaredPath = cloudflaredPath;
@@ -74,3 +74,7 @@ export class CloudflaredTunnel {
         this.childProcess.kill("SIGINT");
     }
 }
+
+module.exports = {
+    CloudflaredTunnel
+};

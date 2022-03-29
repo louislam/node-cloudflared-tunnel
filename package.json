@@ -1,9 +1,8 @@
 {
     "name": "node-cloudflared-tunnel",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
-    "type": "module",
-    "main": "cloudflared-tunnel.js.js",
+    "main": "cloudflared-tunnel.js",
     "scripts": {},
     "author": "Louis Lam",
     "license": "MIT",
