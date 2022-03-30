@@ -1,4 +1,5 @@
 const childProcess = require("child_process");
+const Process = require("process");
 const commandExistsSync = require("command-exists").sync;
 
 class CloudflaredTunnel {
@@ -35,6 +36,11 @@ class CloudflaredTunnel {
     }
 
     start() {
+        if (this.childProcess) {
+            this.emitError("Already started");
+            return;
+        }
+
         if (!this.checkInstalled()) {
             this.emitError(`Cloudflared error: ${this.cloudflaredPath} is not found`);
             return;
@@ -92,6 +98,7 @@ class CloudflaredTunnel {
     stop() {
         this.emitChange("Stopping cloudflared");
         this.childProcess.kill("SIGINT");
+        this.childProcess = null;
     }
 }
 
