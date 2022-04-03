@@ -16,6 +16,20 @@ class CloudflaredTunnel {
     }
 
     set token(token) {
+        if (token && typeof token === "string") {
+            token = token.trim();
+
+            // try to strip out "cloudflared.exe service install"
+            let array = token.split(" ");
+            if (array.length > 1) {
+                for (let i = 0; i < array.length - 1; i++) {
+                    if (array[i] === "install") {
+                        token = array[i + 1];
+                    }
+                }
+            }
+        }
+
         this._token = token;
     }
 
@@ -79,6 +93,7 @@ class CloudflaredTunnel {
 
         this.childProcess.on("close", (code) => {
             this.running = false;
+            this.childProcess = null;
             this.emitChange("Stopped cloudflared", code);
         });
 
