@@ -112,8 +112,10 @@ class CloudflaredTunnel {
 
     stop() {
         this.emitChange("Stopping cloudflared");
-        this.childProcess.kill("SIGINT");
-        this.childProcess = null;
+        if (this.childProcess) {
+            this.childProcess.kill("SIGINT");
+            this.childProcess = null;
+        }
     }
 }
 
